@@ -1,0 +1,1 @@
+# concentration-model-of-intelligence
