@@ -1,18 +1,21 @@
 """
 Matrix sizes
 """
-N = int(100)  # nr of simulated people
-C = int(2)  # nr of characteristics of these people
-M = int(1000)  # nr of normal microskills
-Q = int(100)  # nr of microskills that are part of the IQ test
-T = int(1000)  # time expressed as the nr of occasions
-F = int(10)  # nr of factors that determine the structure of the microskills
+nrOfSimulatedPeople = int(100)      # N
+nrOfCharacteristics = int(2)        # C
+nrOfMicroskillsNormal = int(1000)   # M
+nrOfMicroskillsIQ = int(100)        # Q
+nrOfTestOccasions = int(1000)       # T
+nrOfFactors = int(10)               # F
 
 """
 Parameters to create personality matrix
 """
-pers = {
-    "mean": 0,  # mean of truncated normal distribution to sample characteristics from
-    "sd": 1,  # sd of truncated normal distribution to sample characteristics from
-    "twin_type": None
-}
+PERS_MEAN = 0  # mean of truncated normal distribution to sample characteristics from
+PERS_SD = 1  # sd of truncated normal distribution to sample characteristics from
+PERS_TWIN = None
+
+"""
+Parameters to create knowledge matrix
+"""
+KNOW_SD = 1
