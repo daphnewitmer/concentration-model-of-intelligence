@@ -44,7 +44,7 @@ def create_knowledge_matrix(sd):
     other = truncnorm.rvs(a=0, b=np.inf, loc=0, scale=sd, size=(M, F-1))
     knowledge = np.hstack((cog_cap, other))
 
-    # helper.plot_distribution(knowledge[:, 0], None, 'Cognitive Capacity needed for Microskill(M)', 'Microskill(M)', 'Mean for Cognitive Capacity Sample')
+    # helper.plot_distribution(knowledge[:, 1], None, 'Factor 1 needed for Microskill(M)', 'Microskill(M)', 'Factor 1')
 
     return knowledge
 
@@ -77,7 +77,44 @@ def create_test_matrix(knowledge_matrix):
 
     # helper.plot_distribution(knowledge_matrix[:, 0])
     # plt.plot(cog_cap)
-    # plt.plot(valley_skills, cog_cap[valley_skills], 'ro')
+    # plt.plot(peak_skills, cog_cap[peak_skills], 'ro')
     # plt.show()
 
     return test_matrix
+
+def create_schooling_matrix(first_period, second_period, third_period):
+    """
+    Matrix that codes which microskill m is offered at which time step t. This matrix is created anew for every person i (T x M)
+    """
+
+    total_years = 25
+    time_steps_per_year = int(T / total_years)
+    schooling_matrix = np.zeros((T, M))
+    microskills = []
+
+    for i in range(total_years):
+
+        if i < first_period:
+            perc_rand = float(0.75)
+            replace = True
+        elif i >= first_period and i < second_period or i >= third_period:
+            perc_rand = float(0.5)
+            replace = True
+        elif i >= second_period and i < third_period:
+            perc_rand = float(0.5)
+            replace = False
+
+        random = np.random.choice(M,
+                                  size=int(time_steps_per_year * perc_rand),
+                                  replace=True)  # Sample from all microskills
+
+        fitting_for_period = np.random.choice(np.arange(i * 25, (i * 25 + 25)),
+                                              size=int(time_steps_per_year * (1 - perc_rand)),
+                                              replace=replace)  # Sample from skills associated with age
+
+        microskills.extend(np.append(random, fitting_for_period))
+
+    for t, m in enumerate(microskills):
+        schooling_matrix[t, m] = 1
+
+    return schooling_matrix

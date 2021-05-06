@@ -19,3 +19,10 @@ PERS_TWIN = None
 Parameters to create knowledge matrix
 """
 KNOW_SD = 1
+
+"""
+Parameters to create schooling matrix
+"""
+FIRST_PERIOD = int(4)
+SECOND_PERIOD = int(6)
+THIRD_PERIOD = int(18)
