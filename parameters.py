@@ -18,7 +18,7 @@ PERS_TWIN = None
 """
 Parameters to create knowledge matrix
 """
-KNOW_SD = 1
+KNOW_SD = 0.5
 
 """
 Parameters to create schooling matrix
