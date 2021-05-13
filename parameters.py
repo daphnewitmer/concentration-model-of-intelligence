@@ -8,6 +8,8 @@ nrOfMicroskillsIQ = int(100)        # Q
 nrOfTestOccasions = int(1000)       # T
 nrOfFactors = int(10)               # F
 
+TOTAL_YEARS_OF_SIMULATION = 25
+
 """
 Parameters to create personality matrix
 """
@@ -26,3 +28,4 @@ Parameters to create schooling matrix
 FIRST_PERIOD = int(4)
 SECOND_PERIOD = int(6)
 THIRD_PERIOD = int(18)
+SKILLS_TO_SAMPLE_FROM_PER_AGE = int(25)  # first year the first x skills from the knowledge matrix can be sampled, second year the second x
