@@ -19,9 +19,9 @@ for person in range(1):
     schooling_array = matrices.create_schooling_array(params.FIRST_PERIOD, params.SECOND_PERIOD, params.THIRD_PERIOD, params.SKILLS_TO_SAMPLE_FROM_PER_AGE)
 
     nr_Learned_skills_per_timestep = achievement_matrix.update(person, schooling_array)
-    tests.check_learning_structure(nr_Learned_skills_per_timestep)
+    # tests.check_learning_structure(nr_Learned_skills_per_timestep)
 
 """ Test matrices """
-# tests.check_knowledge_structure(personality_matrix, knowledge_matrix)
+tests.check_knowledge_structure(personality_matrix, knowledge_matrix)
 
 

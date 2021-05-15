@@ -16,7 +16,7 @@ F = params.nrOfFactors
 TOTAL_YEARS = params.TOTAL_YEARS_OF_SIMULATION
 
 # np.random.seed(42)
-# TODO: move numbers to parameters file
+# TODO: move numbers to parameters file + structure?
 
 def create_personality_matrix(mean, sd, twin_type):
     """
@@ -61,7 +61,7 @@ def create_test_matrix(knowledge_matrix):
     cog_cap = knowledge_matrix[:, 0]
 
     # Select microskills on last 5 peaks and last 5 valleys of cognitive capacity
-    peak_skills = signal.find_peaks_cwt(cog_cap,  np.arange(1, 5))[-5:]
+    peak_skills = signal.find_peaks(cog_cap, height=2.5, threshold=0.3, distance=4)[0][-5:]
     inv_data = cog_cap * (-1)
     valley_skills = signal.find_peaks_cwt(inv_data,  np.arange(1, 5))[-5:]
     peak_valley_skills = np.concatenate((peak_skills, valley_skills))
@@ -81,10 +81,10 @@ def create_test_matrix(knowledge_matrix):
 
     test_matrix = np.vstack((factors_permuted, rest_skills_with_noise))
 
-    # tests.plot_distribution(knowledge_matrix[:, 0])
     # plt.plot(cog_cap)
     # plt.plot(peak_skills, cog_cap[peak_skills], 'ro')
     # plt.show()
+    # exit()
 
     return test_matrix
 
@@ -125,10 +125,11 @@ def create_schooling_array(first_period, second_period, third_period, skill_samp
 
 
 class AchievementMatrix:
-    # TODO: check dot.product interpretation + finish parabola equation + add test achievements
+    # TODO: check dot.product interpretation (why not use correlation?) + finish parabola equation + add test achievements
 
     def __init__(self, personality_matrix, knowledge_matrix):
         self.achievement_matrix = np.zeros((N, M), dtype=bool)
+        self.learning_matrix = np.zeros((Q, N), dtype=bool)
         self.personality_matrix = personality_matrix
         self.knowledge_matrix = knowledge_matrix
         self.microskill_similarity_matrix = self.knowledge_matrix.dot(self.knowledge_matrix.T)
@@ -173,12 +174,14 @@ class AchievementMatrix:
 
         max_cog_cap = self.personality_matrix[n, 0]
         x = np.arange(T)
-        a = (-max_cog_cap) / np.power((0 - 450), 2)
-        y = a * np.power((x - 450), 2) + max_cog_cap
+        a = max_cog_cap / (np.power(450, 2) - 450000)
+        b = -1000 * a
+        y = (a * np.power(x, 2)) + (b * x)
 
-        # plt.plot(x, y)
-        # plt.show()
-        # exit()
+        plt.plot(x, y)
+        plt.title('Max cog cap: ' + str(max_cog_cap) + ' Max y :' + str(np.max(y)))
+        plt.show()
+        exit()
 
         return y
 
@@ -196,6 +199,12 @@ class AchievementMatrix:
     def get_acquired_knowledge(self, n, m):
         """ Get sum of already acquired microskill similar to microskil m """
 
+        # test_matrix = np.random.rand(5, 3)
+        # print(test_matrix)
+        # # print(test_matrix.T)
+        # # print(test_matrix.dot(test_matrix.T))
+        # print(np.corrcoef(test_matrix))  # negative correlation?
+        # exit()
         acquired_microskills = np.argwhere(self.achievement_matrix[n, :] > 0)
 
         return sum(self.microskill_similarity_matrix[m, acquired_microskills])
