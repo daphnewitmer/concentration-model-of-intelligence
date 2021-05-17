@@ -29,3 +29,8 @@ FIRST_PERIOD = int(4)
 SECOND_PERIOD = int(6)
 THIRD_PERIOD = int(18)
 SKILLS_TO_SAMPLE_FROM_PER_AGE = int(25)  # first year the first x skills from the knowledge matrix can be sampled, second year the second x
+
+"""
+Parameters to create achievement matrix
+"""
+PEAK_YEAR_COG_CAP = int(18)

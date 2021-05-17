@@ -2,7 +2,6 @@ import numpy as np
 import parameters as params
 from scipy.stats import truncnorm
 import scipy.signal as signal
-# import tests
 import matplotlib.pyplot as plt
 
 """Global variables, specified in parameter file."""
@@ -46,7 +45,14 @@ def create_knowledge_matrix(personality_matrix, sd):
     other = truncnorm.rvs(a=0, b=np.inf, loc=0, scale=sd, size=(M, F-1))
     knowledge = np.hstack((cog_cap, other))
 
-    # tests.plot_distribution(knowledge[:, 0], None, 'Factor 1 needed for Microskill(M)', 'Microskill(M)', 'Factor 1')
+    # max_sine = ((M / TOTAL_YEARS) * 18) + ((M / TOTAL_YEARS) / 4)
+    # min_sine = ((M / TOTAL_YEARS) * 18) + ((M / TOTAL_YEARS) / 4) * 3
+    # print(max_sine)
+
+    # plt.plot(cog_cap)
+    # plt.plot(min_sine, cog_cap[int(min_sine)], 'ro')
+    # plt.show()
+    # exit()
 
     return knowledge
 
@@ -75,7 +81,7 @@ def create_test_matrix(knowledge_matrix):
         factors_permuted = np.hstack((factors_permuted, np.expand_dims(column_permuted, axis=1)))
 
     # Copy items with randomly distributed noise
-    rest_skills_without_noise = np.tile(factors_permuted, [9, 1])  # repeat ten skills another 9 times
+    rest_skills_without_noise = np.tile(factors_permuted, [9, 1])  # Tile: repeat ten skills another x (=9) times
     noise = np.random.normal(0, .1, rest_skills_without_noise.shape)
     rest_skills_with_noise = rest_skills_without_noise + noise
 
@@ -119,13 +125,11 @@ def create_schooling_array(first_period, second_period, third_period, skill_samp
 
         schooling_array.extend(np.append(random, fitting_for_period))
 
-    # tests.plot_distribution(schooling_array, None, 'Presented Microskill at Timestep t', 'Timestep(T)', 'Microskill(M)')
-
     return schooling_array
 
 
 class AchievementMatrix:
-    # TODO: check dot.product interpretation (why not use correlation?) + finish parabola equation + add test achievements
+    # TODO: add test achievements + learning matrix
 
     def __init__(self, personality_matrix, knowledge_matrix):
         self.achievement_matrix = np.zeros((N, M), dtype=bool)
@@ -144,7 +148,7 @@ class AchievementMatrix:
             microskill = schooling_array[timestep]
 
             if self.is_learned(person, microskill, timestep, cog_cap):
-                self.achievement_matrix[person, timestep] = True
+                self.achievement_matrix[person, timestep] = True  # not timestep but microskill
 
             nr_Learned_skills_per_timestep.append(self.achievement_matrix[person].sum())
 
@@ -172,16 +176,13 @@ class AchievementMatrix:
     def get_cog_cap(self, n):
         """ Get the cognitive capacity of person n at time t (cog_cap changes as a function of age) """
 
-        max_cog_cap = self.personality_matrix[n, 0]
+        x_max_cog_cap = (T / TOTAL_YEARS) * params.PEAK_YEAR_COG_CAP
+        y_max_cog_cap = self.personality_matrix[n, 0]
         x = np.arange(T)
-        a = max_cog_cap / (np.power(450, 2) - 450000)
-        b = -1000 * a
-        y = (a * np.power(x, 2)) + (b * x)
+        start_perc_cog_cap = 0.2
 
-        plt.plot(x, y)
-        plt.title('Max cog cap: ' + str(max_cog_cap) + ' Max y :' + str(np.max(y)))
-        plt.show()
-        exit()
+        a = (-y_max_cog_cap) / np.power(x_max_cog_cap, 2)
+        y = ((a * np.power((x - x_max_cog_cap), 2)) + y_max_cog_cap) * (1 - start_perc_cog_cap) + start_perc_cog_cap * y_max_cog_cap
 
         return y
 
@@ -199,12 +200,6 @@ class AchievementMatrix:
     def get_acquired_knowledge(self, n, m):
         """ Get sum of already acquired microskill similar to microskil m """
 
-        # test_matrix = np.random.rand(5, 3)
-        # print(test_matrix)
-        # # print(test_matrix.T)
-        # # print(test_matrix.dot(test_matrix.T))
-        # print(np.corrcoef(test_matrix))  # negative correlation?
-        # exit()
         acquired_microskills = np.argwhere(self.achievement_matrix[n, :] > 0)
 
         return sum(self.microskill_similarity_matrix[m, acquired_microskills])

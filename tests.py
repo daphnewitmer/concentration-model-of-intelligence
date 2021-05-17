@@ -21,7 +21,6 @@ def check_knowledge_structure(personality_matrix, knowledge_matrix):
     for person in range(1):
         cog_cap = AchievementMatrix.get_cog_cap(achievement_matrix, person)
 
-        # TODO: plot over 25 years instead of 1000 timepoints
         plt.plot(np.arange(params.nrOfMicroskillsNormal), knowledge_matrix[:, 0], label='Required Cognitive Capacity')
         plt.plot(np.arange(params.nrOfMicroskillsNormal), cog_cap, label='Person (p=' + str(person) + ') Cognitive Capacity')
         plt.xlabel('Microskills')
@@ -30,6 +29,7 @@ def check_knowledge_structure(personality_matrix, knowledge_matrix):
         plt.legend()
         plt.show()
 
+    # TODO: remove cog_cap from knowledge here
     microskill_similarity_matrix = knowledge_matrix.dot(knowledge_matrix.T)
     sum_knowl_array = microskill_similarity_matrix.sum(axis=0)
 
