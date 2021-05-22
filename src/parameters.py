@@ -34,3 +34,4 @@ SKILLS_TO_SAMPLE_FROM_PER_AGE = int(25)  # first year the first x skills from th
 Parameters to create achievement matrix
 """
 PEAK_YEAR_COG_CAP = int(18)
+TEST_AGE = int(18)
