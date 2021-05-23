@@ -5,7 +5,8 @@ simulation = simulation.Simulation()
 achievement_matrix, learning_matrix = simulation.run()
 
 """ Tests """
-# tests.check_knowledge_structure(simulation)
-tests.check_learning_structure(learning_matrix)
+tests.check_knowledge_structure(simulation)
+tests.check_test_structure(simulation)
+# tests.check_learning_structure(learning_matrix)
 
 
