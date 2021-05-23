@@ -29,7 +29,7 @@ class Simulation:
     def run(self):
         """ Create schooling matrix for every person and update achievement and learning matrix for every person """
 
-        for person in range(1):  # N
+        for person in range(10):  # N
             schooling_array = matrices.create_schooling_array(params.FIRST_PERIOD, params.SECOND_PERIOD,
                                                               params.THIRD_PERIOD, params.SKILLS_TO_SAMPLE_FROM_PER_AGE)
 

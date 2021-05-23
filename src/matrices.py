@@ -2,7 +2,8 @@ import numpy as np
 from src import parameters as params
 from scipy.stats import truncnorm
 
-"""Global variables, specified in parameter file."""
+
+""" Global variables, specified in parameter file """
 N = params.nrOfSimulatedPeople
 C = params.nrOfCharacteristics
 M = params.nrOfMicroskillsNormal
@@ -15,6 +16,7 @@ TOTAL_YEARS = params.TOTAL_YEARS_OF_SIMULATION
 np.random.seed(42)
 # TODO: move numbers to parameters file + structure? + concentration/cog_cap index as param?
 
+
 def create_personality_matrix(mean, sd, twin_type):
     """
     Matrix that codes the value of person i on characteristic c (cognitive capacity and concentration) (N x C)
@@ -25,9 +27,10 @@ def create_personality_matrix(mean, sd, twin_type):
 
     return personality
 
+
 def create_knowledge_matrix(personality_matrix, sd):
     """
-    Matrix that codes how each factor f loads onto each microskill m (M x F)
+    Matrix that codes how each factor f loads onto each microskill m (M x F) F0=cog_cap
     """
 
     max_cog_cap_personality = np.max(personality_matrix[:, 0])
@@ -42,6 +45,7 @@ def create_knowledge_matrix(personality_matrix, sd):
     knowledge = np.hstack((cog_cap, other))
 
     return knowledge
+
 
 def create_test_matrix(knowledge_matrix):
     """
@@ -82,9 +86,10 @@ def create_test_matrix(knowledge_matrix):
 
     return test_matrix
 
+
 def create_schooling_array(first_period, second_period, third_period, skill_sample_age):
     """
-    List that codes which microskill m is offered at which time step t. This matrix is created anew for every person i (M)
+    List that codes which microskill m is offered at which time step t. This matrix is created for every person i (M)
     """
 
     time_steps_per_year = int(T / TOTAL_YEARS)
