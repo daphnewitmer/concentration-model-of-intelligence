@@ -103,17 +103,27 @@ def create_schooling_array(first_period, second_period, third_period, skill_samp
         elif i >= first_period and i < second_period or i >= third_period:
             perc_rand = float(0.5)
             replace = True
+
         elif i >= second_period and i < third_period:
             perc_rand = float(0.5)
             replace = False
 
+        try:
+            perc_rand, replace
+        except NameError:
+            # TODO: Error handling
+            return
+
+        sample_size_all_skills = np.round((time_steps_per_year * perc_rand), 0).astype(int)
+        sample_size_skills_age = np.round((time_steps_per_year * (1 - perc_rand)), 0).astype(int)
+
         random = np.random.choice(np.arange(M),
-                                  size=int(time_steps_per_year * perc_rand),
+                                  size=sample_size_all_skills,
                                   replace=True)  # Sample from all microskills
 
         fitting_for_period = np.random.choice(
             np.arange(i * skill_sample_age, (i * skill_sample_age + skill_sample_age), dtype=int),
-            size=int(time_steps_per_year * (1 - perc_rand)),
+            size=sample_size_skills_age,
             replace=replace)  # Sample from skills associated with age
 
         schooling_array.extend(np.append(random, fitting_for_period))
