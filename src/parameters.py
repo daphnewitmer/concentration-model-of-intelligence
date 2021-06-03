@@ -9,18 +9,16 @@ nrOfTestOccasions = int(1000)       # T
 nrOfFactors = int(10)               # F
 
 TOTAL_YEARS_OF_SIMULATION = 25
-COG_CAP_INDEX = int(0)  # index for cog_cap in personality_matrix, knowledge_matrix and test_matrix
-CONC_INDEX = int(1)  # index for concentration in personality_matrix
 
-nrOfPersInTest = int(20)  # run simulation for a part of the possible simulated persons
+nrOfPersInTest = int(100)  # run simulation for a part of the possible simulated persons
 
 """
 Parameters to create personality matrix
 """
 PERS_MEAN = float(0.7)  # mean of truncated normal distribution to sample cognitive capacity from
 PERS_SD = float(0.5)  # sd of truncated normal distribution to sample cognitive capacity from
-PERS_MEAN_CONC = float(0.6)  # mean of truncated normal distribution to sample concentration from
-PERS_SD_CONC = float(0.25)  # sd of truncated normal distribution to sample concentration from
+PERS_MEAN_CONC = float(0.5)  # mean of truncated normal distribution to sample concentration from
+PERS_SD_CONC = float(0.2)  # sd of truncated normal distribution to sample concentration from
 PERS_TWIN = None
 
 """
@@ -36,16 +34,16 @@ Parameters to create schooling matrix
 """
 SKILLS_TO_SAMPLE_FROM_PER_AGE = int(25)  # first year the first x skills can be sampled, second year the second x
 PERIODS = {
-    'first_period': int(4),
-    'second_period': int(6),
-    'third_period': int(18)
+    'first_period': int(4),  # 4 * 40 = 160 timestep
+    'second_period': int(6),  # 6 * 40 = 240 timestep
+    'third_period': int(18)  # 18 * 40 = 720 timestep
 }
 
 PERC_RAND = {
-    'first_period': float(0.75),
-     'second_period': float(0.5),
-     'third_period': float(0.5),
-     'fourth_period': float(0.5)
+    'first_period': float(0.75),  # 0.75
+    'second_period': float(0.5),  # 0.5
+    'third_period': float(0.5),  # sample cannot be lower than SKILLS_TO_SAMPLE_FROM_PER_AGE because sampled without replacement
+    'fourth_period': float(0.5)  # 0.5
 }
 
 """
@@ -53,7 +51,7 @@ Parameters to create achievement matrix
 """
 PEAK_YEAR_COG_CAP = int(18)
 TEST_AGE = int(18)
-START_PERC_COG_CAP = float(0.4)
-ACQ_KNOWL_WEIGHT = float(0.002)
-SD_CONC = float(0.2)  # sd to sample concentration noise from
-MEAN_CONC = float(0)  # mean to sample concantration noise from
+START_PERC_COG_CAP = float(0.35)
+ACQ_KNOWL_WEIGHT = float(0.001)  # 0.001
+SD_CONC_NOISE = float(0.2)  # sd to sample concentration noise from
+MEAN_CONC_NOISE = float(0)  # mean to sample concantration noise from

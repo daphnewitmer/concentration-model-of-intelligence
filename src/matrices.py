@@ -1,7 +1,7 @@
 import numpy as np
 from src import parameters as params
 from scipy.stats import truncnorm
-
+import matplotlib.pyplot as plt
 
 """ Global variables, specified in parameter file """
 N = params.nrOfSimulatedPeople
@@ -10,9 +10,6 @@ M = params.nrOfMicroskillsNormal
 Q = params.nrOfMicroskillsIQ
 T = params.nrOfTestOccasions
 F = params.nrOfFactors
-
-TOTAL_YEARS = params.TOTAL_YEARS_OF_SIMULATION
-COG_CAP_INDEX = params.COG_CAP_INDEX
 
 np.random.seed(42)
 # TODO: move numbers to parameters file + structure? + concentration/cog_cap index as param?
@@ -36,11 +33,11 @@ def create_knowledge_matrix(personality_matrix):
     Matrix that codes how each factor f loads onto each microskill m (M x F) F0=cog_cap
     """
 
-    max_cog_cap_personality = np.max(personality_matrix[:, COG_CAP_INDEX])
+    max_cog_cap_personality = np.max(personality_matrix[:, 0])
 
     mean = np.linspace(0, max_cog_cap_personality * params.PERC_OF_MAX_COG_CAP, M)
     time = np.linspace(0, M, M)
-    sinusoid = np.sin(time / (M / TOTAL_YEARS) * (2 * np.pi))
+    sinusoid = np.sin(time / (M / params.TOTAL_YEARS_OF_SIMULATION) * (2 * np.pi))
     conv_mean = mean + 0.5 * np.multiply(mean, sinusoid)
 
     cog_cap = [truncnorm.rvs(a=0, b=np.inf, loc=u, scale=params.KNOW_SD_COG_CAP, size=1) for u in conv_mean]
@@ -54,17 +51,17 @@ def create_test_matrix(knowledge_matrix):
     """
     Matrix that codes how each factor f loads onto each microskill m (Q x F)
     """
-    # TODO: check peaks and valleys + T or M
+    # TODO: check peaks and valleys
 
-    cog_cap = knowledge_matrix[:, COG_CAP_INDEX]
-    peak_valley_skills = []
+
+    cog_cap = knowledge_matrix[:, 0]
+    TOTAL_YEARS = params.TOTAL_YEARS_OF_SIMULATION
 
     # Select microskills on last 5 peaks and last 5 valleys of cognitive capacity
-    for age in [20, 21, 22, 23, 24]:
-        max_sine = (T / TOTAL_YEARS) * age + ((M / TOTAL_YEARS) / 4)  # T or M?
-        min_sine = (T / TOTAL_YEARS) * age + ((M / TOTAL_YEARS) / 4) * 3
-        peak_valley_skills.append(int(max_sine))
-        peak_valley_skills.append(int(min_sine))
+    age = np.array([20, 21, 22, 23, 24], dtype=int)
+    max_sine = (T / TOTAL_YEARS) * age + ((T / TOTAL_YEARS) / 4)
+    min_sine = (T / TOTAL_YEARS) * age + ((T / TOTAL_YEARS) / 4) * 3
+    peak_valley_skills = np.concatenate((max_sine.astype(int), min_sine.astype(int)))
 
     # plt.plot(cog_cap)
     # plt.plot(peak_valley_skills, cog_cap[peak_valley_skills], 'ro')
@@ -97,6 +94,7 @@ def create_schooling_array():
     skill_sample_age = params.SKILLS_TO_SAMPLE_FROM_PER_AGE
     periods = params.PERIODS
     all_perc_rand = params.PERC_RAND
+    TOTAL_YEARS = params.TOTAL_YEARS_OF_SIMULATION
 
     time_steps_per_year = int(T / TOTAL_YEARS)
     schooling_array = []
@@ -136,6 +134,8 @@ def create_schooling_array():
             size=sample_size_skills_age,
             replace=replace)  # Sample from skills associated with age
 
-        schooling_array.extend(np.append(random, fitting_for_period))
+        selected_skills = np.append(random, fitting_for_period)
+        np.random.shuffle(selected_skills)
+        schooling_array.extend(selected_skills)
 
     return schooling_array
