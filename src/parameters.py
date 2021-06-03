@@ -40,7 +40,7 @@ PERIODS = {
 }
 
 PERC_RAND = {
-    'first_period': float(0.75),  # 0.75
+    'first_period': float(0),  # 0.75
     'second_period': float(0.5),  # 0.5
     'third_period': float(0.5),  # sample cannot be lower than SKILLS_TO_SAMPLE_FROM_PER_AGE because sampled without replacement
     'fourth_period': float(0.5)  # 0.5
