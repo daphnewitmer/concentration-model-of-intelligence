@@ -21,7 +21,7 @@ def create_personality_matrix(twin_type):
     """
     # TODO: implement twin options
 
-    cog_cap = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN, scale=params.PERS_SD, size=(N, 1))
+    cog_cap = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_COP_CAP, scale=params.PERS_SD_COG_CAP, size=(N, 1))
     conc = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_CONC, scale=params.PERS_SD_CONC, size=(N, 1))
     personality = np.hstack((cog_cap, conc))
 
@@ -34,14 +34,19 @@ def create_knowledge_matrix(personality_matrix):
     """
 
     max_cog_cap_personality = np.max(personality_matrix[:, 0])
+    first_years = int(params.YEARS_ZERO_COG_CAP * (M / params.TOTAL_YEARS_OF_SIMULATION))
+    print(first_years)
 
-    mean = np.linspace(0, max_cog_cap_personality * params.PERC_OF_MAX_COG_CAP, M)
-    time = np.linspace(0, M, M)
+    mean = np.linspace(0, max_cog_cap_personality * params.PERC_OF_MAX_COG_CAP, M - first_years)
+    time = np.linspace(0, M-first_years, M-first_years)
     sinusoid = np.sin(time / (M / params.TOTAL_YEARS_OF_SIMULATION) * (2 * np.pi))
     conv_mean = mean + 0.5 * np.multiply(mean, sinusoid)
 
-    cog_cap = [truncnorm.rvs(a=0, b=np.inf, loc=u, scale=params.KNOW_SD_COG_CAP, size=1) for u in conv_mean]
+    cog_cap_first_years = np.zeros((first_years, 1))
+    cog_cap_last_years = [truncnorm.rvs(a=0, b=np.inf, loc=u, scale=params.KNOW_SD_COG_CAP, size=1) for u in conv_mean]
+    cog_cap = np.vstack((cog_cap_first_years, cog_cap_last_years))
     other = truncnorm.rvs(a=0, b=np.inf, loc=params.KNOW_MEAN, scale=params.KNOW_SD, size=(M, F - 1))
+
     knowledge = np.hstack((cog_cap, other))
 
     return knowledge

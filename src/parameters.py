@@ -15,8 +15,8 @@ nrOfPersInTest = int(100)  # run simulation for a part of the possible simulated
 """
 Parameters to create personality matrix
 """
-PERS_MEAN = float(0.7)  # mean of truncated normal distribution to sample cognitive capacity from
-PERS_SD = float(0.5)  # sd of truncated normal distribution to sample cognitive capacity from
+PERS_MEAN_COP_CAP = float(0.7)  # mean of truncated normal distribution to sample cognitive capacity from
+PERS_SD_COG_CAP = float(0.5)  # sd of truncated normal distribution to sample cognitive capacity from
 PERS_MEAN_CONC = float(0.5)  # mean of truncated normal distribution to sample concentration from
 PERS_SD_CONC = float(0.2)  # sd of truncated normal distribution to sample concentration from
 PERS_TWIN = None
@@ -28,6 +28,7 @@ KNOW_MEAN = int(0)  # mean of truncated normal distribution to sample factors fr
 KNOW_SD = float(0.5)  # sd of truncated normal distribution to sample factors from (all but cog_cap)
 KNOW_SD_COG_CAP = float(0.5)  # sd of truncated normal distribution to sample cog cap from
 PERC_OF_MAX_COG_CAP = float(0.7)  # required cog cap is set to this percentage of max cog cap of persons
+YEARS_ZERO_COG_CAP = int(2)  # nr of years where microskills require zero cognitive capacity
 
 """
 Parameters to create schooling matrix
@@ -40,7 +41,7 @@ PERIODS = {
 }
 
 PERC_RAND = {
-    'first_period': float(0),  # 0.75
+    'first_period': float(0.75),  # 0.75
     'second_period': float(0.5),  # 0.5
     'third_period': float(0.5),  # sample cannot be lower than SKILLS_TO_SAMPLE_FROM_PER_AGE because sampled without replacement
     'fourth_period': float(0.5)  # 0.5
@@ -51,7 +52,7 @@ Parameters to create achievement matrix
 """
 PEAK_YEAR_COG_CAP = int(18)
 TEST_AGE = int(18)
-START_PERC_COG_CAP = float(0.35)
+START_PERC_COG_CAP = float(0)
 ACQ_KNOWL_WEIGHT = float(0.001)  # 0.001
 SD_CONC_NOISE = float(0.2)  # sd to sample concentration noise from
 MEAN_CONC_NOISE = float(0)  # mean to sample concantration noise from
