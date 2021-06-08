@@ -35,7 +35,6 @@ def create_knowledge_matrix(personality_matrix):
 
     max_cog_cap_personality = np.max(personality_matrix[:, 0])
     first_years = int(params.YEARS_ZERO_COG_CAP * (M / params.TOTAL_YEARS_OF_SIMULATION))
-    print(first_years)
 
     mean = np.linspace(0, max_cog_cap_personality * params.PERC_OF_MAX_COG_CAP, M - first_years)
     time = np.linspace(0, M-first_years, M-first_years)
@@ -61,32 +60,36 @@ def create_test_matrix(knowledge_matrix):
 
     cog_cap = knowledge_matrix[:, 0]
     TOTAL_YEARS = params.TOTAL_YEARS_OF_SIMULATION
+    test_types = {'child':  np.array([10, 11, 12, 13, 14], dtype=int), 'adult': np.array([20, 21, 22, 23, 24], dtype=int)}
+    part_matrix = {}
 
-    # Select microskills on last 5 peaks and last 5 valleys of cognitive capacity
-    age = np.array([20, 21, 22, 23, 24], dtype=int)
-    max_sine = (T / TOTAL_YEARS) * age + ((T / TOTAL_YEARS) / 4)
-    min_sine = (T / TOTAL_YEARS) * age + ((T / TOTAL_YEARS) / 4) * 3
-    peak_valley_skills = np.concatenate((max_sine.astype(int), min_sine.astype(int)))
+    for type, age in test_types.items():
+        # Select microskills on last 5 peaks and last 5 valleys of cognitive capacity
+        max_sine = (T / TOTAL_YEARS) * age + ((T / TOTAL_YEARS) / 4)
+        min_sine = (T / TOTAL_YEARS) * age + ((T / TOTAL_YEARS) / 4) * 3
+        peak_valley_skills = np.concatenate((max_sine.astype(int), min_sine.astype(int)))
 
-    # plt.plot(cog_cap)
-    # plt.plot(peak_valley_skills, cog_cap[peak_valley_skills], 'ro')
-    # plt.show()
-    # exit()
+        # plt.plot(cog_cap)
+        # plt.plot(peak_valley_skills, cog_cap[peak_valley_skills], 'ro')
+        # plt.show()
+        # exit()
 
-    # Permutate factor values except cog_cap
-    factors_without_cog_cap = knowledge_matrix[peak_valley_skills, 1:]
-    factors_permuted = cog_cap[peak_valley_skills, np.newaxis]
+        # Permutate factor values except cog_cap
+        factors_without_cog_cap = knowledge_matrix[peak_valley_skills, 1:]
+        factors_permuted = cog_cap[peak_valley_skills, np.newaxis]
 
-    for column in factors_without_cog_cap.T:
-        column_permuted = np.random.permutation(column)
-        factors_permuted = np.hstack((factors_permuted, np.expand_dims(column_permuted, axis=1)))
+        for column in factors_without_cog_cap.T:
+            column_permuted = np.random.permutation(column)
+            factors_permuted = np.hstack((factors_permuted, np.expand_dims(column_permuted, axis=1)))
 
-    # Copy items with randomly distributed noise
-    rest_skills_without_noise = np.tile(factors_permuted, [9, 1])  # Tile: repeat ten skills another x (=9) times
-    noise = np.random.normal(0, .1, rest_skills_without_noise.shape)
-    rest_skills_with_noise = rest_skills_without_noise + noise
+        # Copy items with randomly distributed noise
+        rest_skills_without_noise = np.tile(factors_permuted, [9, 1])  # Tile: repeat ten skills another x (=9) times
+        noise = np.random.normal(0, .1, rest_skills_without_noise.shape)
+        rest_skills_with_noise = rest_skills_without_noise + noise
 
-    test_matrix = np.vstack((factors_permuted, rest_skills_with_noise))
+        part_matrix[type] = np.vstack((factors_permuted, rest_skills_with_noise))
+
+    test_matrix = np.vstack((part_matrix['child'], part_matrix['adult']))
 
     return test_matrix
 

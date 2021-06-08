@@ -1,3 +1,5 @@
+import numpy as np
+
 """
 Matrix sizes
 """
@@ -10,7 +12,7 @@ nrOfFactors = int(10)               # F
 
 TOTAL_YEARS_OF_SIMULATION = 25
 
-nrOfPersInTest = int(100)  # run simulation for a part of the possible simulated persons
+nrOfPersInTest = int(20)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
 
 """
 Parameters to create personality matrix
@@ -51,7 +53,7 @@ PERC_RAND = {
 Parameters to create achievement matrix
 """
 PEAK_YEAR_COG_CAP = int(18)
-TEST_AGE = int(18)
+TEST_AGES = np.array([10, 14, 18, 22])
 START_PERC_COG_CAP = float(0)
 ACQ_KNOWL_WEIGHT = float(0.001)  # 0.001
 SD_CONC_NOISE = float(0.2)  # sd to sample concentration noise from

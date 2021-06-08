@@ -25,7 +25,7 @@ class Simulation:
         self.test_matrix = matrices.create_test_matrix(self.knowledge_matrix)
         self.microskill_similarity_matrix = self.knowledge_matrix.dot(self.knowledge_matrix.T)
         self.achievement_matrix = np.zeros((N, M), dtype=bool)
-        self.learning_matrix = np.zeros((T + Q, N), dtype=bool)
+        self.learning_matrix = np.zeros((T + (Q * len(params.TEST_AGES)), N), dtype=bool)
         self.concentration_matrix = np.zeros((T, N))
         self.cog_cap_matrix = np.zeros((T, N))
         self.schooling_matrix = np.zeros((N, M), dtype=int)
@@ -45,7 +45,7 @@ class Simulation:
 
         cog_cap = self.get_cog_cap(person)  # Get cognitive capacity for person at every timestep (array)
         self.cog_cap_matrix[:, person] = cog_cap  # Safe cognitive capacity so this can be easily accessed in tests
-        test_timestep = int((T / TOTAL_YEARS) * params.TEST_AGE)
+        test_timesteps = np.multiply((T / TOTAL_YEARS), params.TEST_AGES)
 
         for timestep in range(T):
             microskill = schooling_array[timestep]  # Get microskill that is offered at this timestep
@@ -56,16 +56,18 @@ class Simulation:
                 self.learning_matrix[timestep, person] = True
 
             # If timestep is test age, take test
-            if timestep == test_timestep:
-                self.take_test(person, timestep, cog_cap)
+            if timestep in test_timesteps.astype(int):
+                self.take_test(person, timestep, cog_cap, test_timesteps)
 
         return
 
-    def take_test(self, person: int, overall_timestep: int, cog_cap: np.ndarray):
+    def take_test(self, person: int, overall_timestep: int, cog_cap: np.ndarray, test_timesteps:np.ndarray):
         """ Take IQ test """
 
+        test_index_in_learning_matrix = int(np.where(test_timesteps == overall_timestep)[0][0] * 100)
+
         for microskill in range(Q):
-            test_timestep = T + microskill
+            test_timestep = T + test_index_in_learning_matrix + microskill
             if self.is_learned(person, microskill, overall_timestep, cog_cap, test=True):
                 self.learning_matrix[test_timestep, person] = True
 
