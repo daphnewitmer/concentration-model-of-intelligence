@@ -78,6 +78,7 @@ def create_test_matrix(knowledge_matrix):
         factors_without_cog_cap = knowledge_matrix[peak_valley_skills, 1:]
         factors_permuted = cog_cap[peak_valley_skills, np.newaxis]
 
+
         for column in factors_without_cog_cap.T:
             column_permuted = np.random.permutation(column)
             factors_permuted = np.hstack((factors_permuted, np.expand_dims(column_permuted, axis=1)))
