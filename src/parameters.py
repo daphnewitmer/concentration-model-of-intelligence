@@ -12,7 +12,7 @@ nrOfFactors = int(10)               # F
 
 TOTAL_YEARS_OF_SIMULATION = 25
 
-nrOfPersInTest = int(20)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
+nrOfPersInTest = int(100)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
 
 """
 Parameters to create personality matrix
