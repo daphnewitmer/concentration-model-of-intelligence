@@ -73,8 +73,11 @@ class Simulation:
 
     def is_learned(self, person: int, microskill: int, timepoint: int, cog_cap: np.ndarray, test: bool):
         """ Check whether person n was able to learn the microskill m """
+        # TODO: remove unneeded numbers from add (17)
 
         if test:
+            if timepoint > (T / TOTAL_YEARS) * 17:
+                microskill = microskill + int(100)
             req_cog_cap = self.test_matrix[microskill, 0]
             concentration = self.personality_matrix[person, 1]
         else:

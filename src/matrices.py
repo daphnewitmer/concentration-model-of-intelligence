@@ -60,7 +60,7 @@ def create_test_matrix(knowledge_matrix):
 
     cog_cap = knowledge_matrix[:, 0]
     TOTAL_YEARS = params.TOTAL_YEARS_OF_SIMULATION
-    test_types = {'child':  np.array([10, 11, 12, 13, 14], dtype=int), 'adult': np.array([20, 21, 22, 23, 24], dtype=int)}
+    test_types = {'child':  np.array([10, 11, 12, 13, 14], dtype=int), 'adult': np.array([18, 19, 20, 21, 22], dtype=int)}
     part_matrix = {}
 
     for type, age in test_types.items():
