@@ -72,12 +72,10 @@ def create_test_matrix(knowledge_matrix):
         # plt.plot(cog_cap)
         # plt.plot(peak_valley_skills, cog_cap[peak_valley_skills], 'ro')
         # plt.show()
-        # exit()
 
         # Permutate factor values except cog_cap
         factors_without_cog_cap = knowledge_matrix[peak_valley_skills, 1:]
         factors_permuted = cog_cap[peak_valley_skills, np.newaxis]
-
 
         for column in factors_without_cog_cap.T:
             column_permuted = np.random.permutation(column)
@@ -90,10 +88,13 @@ def create_test_matrix(knowledge_matrix):
 
         part_matrix[type] = np.vstack((factors_permuted, rest_skills_with_noise))
 
+    # Normalize items
+    part_matrix['child'] = (part_matrix['child'] / part_matrix['child'].sum(axis=0) * part_matrix['child'].sum(axis=0).mean())
+    part_matrix['adult'] = (part_matrix['adult'] / part_matrix['adult'].sum(axis=0) * part_matrix['adult'].sum(axis=0).mean())
+
     test_matrix = np.vstack((part_matrix['child'], part_matrix['adult']))
 
     return test_matrix
-
 
 def create_schooling_array():
     """
