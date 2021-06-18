@@ -21,8 +21,22 @@ def create_personality_matrix(twin_type):
     """
     # TODO: implement twin options
 
-    cog_cap = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_COP_CAP, scale=params.PERS_SD_COG_CAP, size=(N, 1))
-    conc = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_CONC, scale=params.PERS_SD_CONC, size=(N, 1))
+    if twin_type == 'none':
+        cog_cap = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_COP_CAP, scale=params.PERS_SD_COG_CAP, size=(N, 1))
+        conc = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_CONC, scale=params.PERS_SD_CONC, size=(N, 1))
+
+    if twin_type == 'mono' or twin_type == 'diz':
+        cog_cap = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_COP_CAP, scale=params.PERS_SD_COG_CAP, size=(int(N/2), 1))
+        cog_cap = np.repeat(cog_cap, 2, axis=0)
+        conc = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_CONC, scale=params.PERS_SD_CONC, size=(int(N/2), 1))
+        conc = np.repeat(conc, 2, axis=0)
+
+    if twin_type == 'diz':
+        noise = np.random.normal(0, .15, int(N/2))
+        cog_cap[0::2] = np.add(cog_cap[0::2], noise[:, np.newaxis])
+        noise = np.random.normal(0, .2, int(N / 2))
+        conc[0::2] = np.add(conc[0::2], noise[:, np.newaxis])
+
     personality = np.hstack((cog_cap, conc))
 
     return personality
@@ -57,7 +71,6 @@ def create_test_matrix(knowledge_matrix):
     """
     # TODO: check peaks and valleys
 
-
     cog_cap = knowledge_matrix[:, 0]
     TOTAL_YEARS = params.TOTAL_YEARS_OF_SIMULATION
     test_types = {'child':  np.array([10, 11, 12, 13, 14], dtype=int), 'adult': np.array([18, 19, 20, 21, 22], dtype=int)}
@@ -89,8 +102,9 @@ def create_test_matrix(knowledge_matrix):
         part_matrix[type] = np.vstack((factors_permuted, rest_skills_with_noise))
 
     # Normalize items
-    part_matrix['child'] = (part_matrix['child'] / part_matrix['child'].sum(axis=0) * part_matrix['child'].sum(axis=0).mean())
-    part_matrix['adult'] = (part_matrix['adult'] / part_matrix['adult'].sum(axis=0) * part_matrix['adult'].sum(axis=0).mean())
+    if params.NORMALIZE_TEST:
+        part_matrix['child'] = (part_matrix['child'] / part_matrix['child'].sum(axis=0) * part_matrix['child'].sum(axis=0).mean())
+        part_matrix['adult'] = (part_matrix['adult'] / part_matrix['adult'].sum(axis=0) * part_matrix['adult'].sum(axis=0).mean())
 
     test_matrix = np.vstack((part_matrix['child'], part_matrix['adult']))
 

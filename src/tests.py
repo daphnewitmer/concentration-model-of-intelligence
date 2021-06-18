@@ -15,17 +15,7 @@ class Test:
 
     def run(self):
 
-        fig, axs = plt.subplots(2, 4)
-        plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=0.4)
-
-        for i in range(len(params.TEST_AGES)):
-            start = 1000 + (i * 100)
-            self.plot_raw_iq_scores(axs, (0, i), ". Frequency Hist (test" + str(i + 1) + ")", start, start + 100, i + 1)
-            self.plot_corr(axs, (1, i), i+1)
-            self.factor_analysis(axs, (1, 0), i+1)
-        plt.show()
-        exit()
-
+        # Make plots about item and learning structure
         fig, axs = plt.subplots(2, 4)
         self.check_knowledge_structure(axs, (0, 0), 1)
         self.check_item_variation('knowledge', axs, (0, 1), 2)  # knowledge or test
@@ -39,6 +29,29 @@ class Test:
                      + '\nAcquired knowledge weight: ' + str(params.ACQ_KNOWL_WEIGHT) \
                      + '%\nStart percentage cog cap: ' + str(params.START_PERC_COG_CAP) + '%'
         plt.figtext(0.01, 0.9, parameters)
+        plt.show()
+
+        # Make plots about test results
+        fig, axs = plt.subplots(2, 4)
+        plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=0.4)
+        for i in range(len(params.TEST_AGES)):
+            start = 1000 + (i * 100)
+            self.plot_raw_iq_scores(axs, (0, i), ". Frequency Hist (test" + str(i + 1) + ")", start, start + 100, i + 1)
+            self.plot_corr(axs, (1, i), i+1)
+            self.factor_analysis(axs, (1, 0), i+1)
+        plt.show()
+
+    def check_cog_cap_structure(self):
+
+        for person in range(10):
+            cog_cap = self.simulation.get_cog_cap(person)
+            plt.plot(np.arange(params.nrOfMicroskillsNormal), cog_cap,
+                            label='Person (p=' + str(person) + ') Cognitive Capacity')
+
+        plt.title(params.PERS_TWIN)
+        plt.ylabel('Cognitive Capacity')
+        plt.xlabel('Time')
+        plt.legend()
         plt.show()
 
     def check_knowledge_structure(self, axs, place, plot_nr):
@@ -86,7 +99,13 @@ class Test:
     def check_test_structure(self, axs, place, plot_nr):
         """ Plot with required cognitive capacity and average cognitive capacity for m in test matrix """
 
-        for person in range(1):
+        all_tests = np.concatenate((self.simulation.test_matrix[0:100, 0], self.simulation.test_matrix[0:100, 0],
+                                    self.simulation.test_matrix[100:, 0], self.simulation.test_matrix[100:, 0]))
+
+        axs[place].plot(np.arange(all_tests.size), all_tests,
+                        label='Required Cognitive Capacity')
+
+        for person in range(3):
             cog_cap = self.simulation.get_cog_cap(person)
             test_timepoints = np.multiply((params.nrOfTestOccasions / params.TOTAL_YEARS_OF_SIMULATION), params.TEST_AGES)
 
@@ -94,13 +113,9 @@ class Test:
             for timepoint in test_timepoints.astype(int):
                 selection.extend(cog_cap[timepoint: int(timepoint + 100)])
 
-            all_tests = np.concatenate((self.simulation.test_matrix[0:100, 0], self.simulation.test_matrix[0:100, 0],
-                                       self.simulation.test_matrix[100:, 0], self.simulation.test_matrix[100:, 0]))
-
-            axs[place].plot(np.arange(all_tests.size), all_tests,
-                     label='Required Cognitive Capacity')
             axs[place].plot(np.arange(all_tests.size), selection,
                      label='Person (p=' + str(person) + ') Cognitive Capacity')
+
 
         axs[place].set_xlabel('Microskills')
         axs[place].set_ylabel('Cognitive Capacity')

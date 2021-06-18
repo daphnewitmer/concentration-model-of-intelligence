@@ -12,7 +12,7 @@ nrOfFactors = int(10)               # F
 
 TOTAL_YEARS_OF_SIMULATION = 25
 
-nrOfPersInTest = int(100)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
+nrOfPersInTest = int(10)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
 
 """
 Parameters to create personality matrix
@@ -21,7 +21,7 @@ PERS_MEAN_COP_CAP = float(0.7)  # mean of truncated normal distribution to sampl
 PERS_SD_COG_CAP = float(0.5)  # sd of truncated normal distribution to sample cognitive capacity from
 PERS_MEAN_CONC = float(0.5)  # mean of truncated normal distribution to sample concentration from
 PERS_SD_CONC = float(0.2)  # sd of truncated normal distribution to sample concentration from
-PERS_TWIN = None
+PERS_TWIN = 'none'  # none, mono, diz
 
 """
 Parameters to create knowledge matrix
@@ -48,6 +48,11 @@ PERC_RAND = {
     'third_period': float(0.5),  # sample cannot be lower than SKILLS_TO_SAMPLE_FROM_PER_AGE because sampled without replacement
     'fourth_period': float(0.5)  # 0.5
 }
+
+"""
+Parameters to create test matrix
+"""
+NORMALIZE_TEST = False
 
 """
 Parameters to create achievement matrix
