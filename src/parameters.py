@@ -12,7 +12,7 @@ nrOfFactors = int(10)               # F
 
 TOTAL_YEARS_OF_SIMULATION = 25
 
-nrOfPersInTest = int(10)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
+nrOfPersInTest = int(100)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
 
 """
 Parameters to create personality matrix
@@ -21,7 +21,7 @@ PERS_MEAN_COP_CAP = float(0.7)  # mean of truncated normal distribution to sampl
 PERS_SD_COG_CAP = float(0.5)  # sd of truncated normal distribution to sample cognitive capacity from
 PERS_MEAN_CONC = float(0.5)  # mean of truncated normal distribution to sample concentration from
 PERS_SD_CONC = float(0.2)  # sd of truncated normal distribution to sample concentration from
-PERS_TWIN = 'none'  # none, mono, diz
+PERS_TWIN = 'diz'  # none, mono, diz
 
 """
 Parameters to create knowledge matrix
@@ -35,6 +35,7 @@ YEARS_ZERO_COG_CAP = int(2)  # nr of years where microskills require zero cognit
 """
 Parameters to create schooling matrix
 """
+PERC_SIMILAR_TWINS = float(0.8)
 SKILLS_TO_SAMPLE_FROM_PER_AGE = int(25)  # first year the first x skills can be sampled, second year the second x
 PERIODS = {
     'first_period': int(4),  # 4 * 40 = 160 timestep

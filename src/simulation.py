@@ -33,9 +33,15 @@ class Simulation:
     def run(self):
         """ Create schooling matrix for every person and update achievement and learning matrix for every person """
 
+        percentage = params.PERC_SIMILAR_TWINS
+
         for person in range(params.nrOfPersInTest):
             schooling_array = matrices.create_schooling_array()  # Create schooling array for person n
             self.schooling_matrix[person, :] = schooling_array  # Safe schooling array for every person for tests
+            if params.PERS_TWIN != 'none' and (person % 2) != 0:
+                x = np.random.choice(len(schooling_array), size=(int(len(schooling_array) * percentage)), replace=False)
+                self.schooling_matrix[person, x] = self.schooling_matrix[person-1, x]
+
             self.update(person, schooling_array)  # Update achievement matrix for person n
 
         return self.achievement_matrix, self.learning_matrix

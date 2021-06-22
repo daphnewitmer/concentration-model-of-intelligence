@@ -21,21 +21,22 @@ def create_personality_matrix(twin_type):
     """
     # TODO: implement twin options
 
-    if twin_type == 'none':
+    if twin_type == 'none' or twin_type == 'diz':
         cog_cap = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_COP_CAP, scale=params.PERS_SD_COG_CAP, size=(N, 1))
         conc = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_CONC, scale=params.PERS_SD_CONC, size=(N, 1))
 
-    if twin_type == 'mono' or twin_type == 'diz':
+    if twin_type == 'mono':
         cog_cap = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_COP_CAP, scale=params.PERS_SD_COG_CAP, size=(int(N/2), 1))
         cog_cap = np.repeat(cog_cap, 2, axis=0)
         conc = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_CONC, scale=params.PERS_SD_CONC, size=(int(N/2), 1))
         conc = np.repeat(conc, 2, axis=0)
 
     if twin_type == 'diz':
-        noise = np.random.normal(0, .15, int(N/2))
-        cog_cap[0::2] = np.add(cog_cap[0::2], noise[:, np.newaxis])
-        noise = np.random.normal(0, .2, int(N / 2))
-        conc[0::2] = np.add(conc[0::2], noise[:, np.newaxis])
+        cog_cap[1::2] = (cog_cap[::2] + cog_cap[1::2])/2
+        # noise = np.random.normal(0, .15, int(N/2))
+        # cog_cap[0::2] = np.add(cog_cap[0::2], noise[:, np.newaxis])
+        # noise = np.random.normal(0, .2, int(N / 2))
+        # conc[0::2] = np.add(conc[0::2], noise[:, np.newaxis])
 
     personality = np.hstack((cog_cap, conc))
 
@@ -101,6 +102,7 @@ def create_test_matrix(knowledge_matrix):
 
         part_matrix[type] = np.vstack((factors_permuted, rest_skills_with_noise))
 
+    # TODO: cog_cap should not be normalized
     # Normalize items
     if params.NORMALIZE_TEST:
         part_matrix['child'] = (part_matrix['child'] / part_matrix['child'].sum(axis=0) * part_matrix['child'].sum(axis=0).mean())
