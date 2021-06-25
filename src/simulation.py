@@ -2,7 +2,6 @@ import numpy as np
 from src import parameters as params, matrices
 from scipy.stats import truncnorm
 
-
 """Global variables, specified in parameter file."""
 N = params.nrOfSimulatedPeople
 C = params.nrOfCharacteristics
@@ -17,15 +16,14 @@ np.random.seed(42)
 
 
 class Simulation:
-    # TODO: speed (remove loops) + parameter tests (child smaller variation than adult)
 
     def __init__(self):
         self.personality_matrix = matrices.create_personality_matrix(params.PERS_TWIN)
         self.knowledge_matrix = matrices.create_knowledge_matrix(self.personality_matrix)
         self.test_matrix = matrices.create_test_matrix(self.knowledge_matrix)
-        self.microskill_similarity_matrix = self.knowledge_matrix.dot(self.knowledge_matrix.T)
-        self.achievement_matrix = np.zeros((N, M), dtype=bool)
         self.learning_matrix = np.zeros((T + (Q * len(params.TEST_AGES)), N), dtype=bool)
+        self.achievement_matrix = np.zeros((N, M), dtype=bool)
+        self.microskill_similarity_matrix = self.knowledge_matrix.dot(self.knowledge_matrix.T)
         self.concentration_matrix = np.zeros((T, N))
         self.cog_cap_matrix = np.zeros((T, N))
         self.schooling_matrix = np.zeros((N, M), dtype=int)
@@ -43,8 +41,6 @@ class Simulation:
                 self.schooling_matrix[person, x] = self.schooling_matrix[person-1, x]
 
             self.update(person, schooling_array)  # Update achievement matrix for person n
-
-        return self.achievement_matrix, self.learning_matrix
 
     def update(self, person: int, schooling_array: list):
         """ Update achievement and learning matrix for person n for every timestep t """

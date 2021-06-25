@@ -1,14 +1,14 @@
 from src import simulation, tests
 import time
 
-""" Simulation """
 start_time = time.time()
 
+""" Run Simulation """
 simulation = simulation.Simulation()
-achievement_matrix, learning_matrix = simulation.run()
+simulation.run()
 
-print("--- %s seconds ---" % (time.time() - start_time))
+print("--- Simulation took %s seconds ---" % round(time.time() - start_time, 2))
 
-""" Tests """
-tests = tests.Test(simulation, learning_matrix)
+""" Run Tests """
+tests = tests.Test(simulation)
 tests.run()

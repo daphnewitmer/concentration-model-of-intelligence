@@ -1,6 +1,11 @@
 import numpy as np
 
 """
+Speed up the simulation for testing code
+"""
+nrOfPersInTest = int(100)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
+
+"""
 Matrix sizes
 """
 nrOfSimulatedPeople = int(100)      # N
@@ -11,8 +16,6 @@ nrOfTestOccasions = int(1000)       # T
 nrOfFactors = int(10)               # F
 
 TOTAL_YEARS_OF_SIMULATION = 25
-
-nrOfPersInTest = int(100)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
 
 """
 Parameters to create personality matrix
