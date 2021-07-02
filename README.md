@@ -34,6 +34,17 @@ In this file the life course of every person is simulated. Micro skills from the
 person and evaluated whether they learn the micro skill or not. The following matrices are created:
 - Learning matrix: (T+Q) x N matrix that codes whether the micro skill offered at time step t was learned by person i.
 - Achievement matrix: N x M matrix that codes whether micro skill m has been acquired by person i.
+\
+\
+The `update()` function updates the learning and achievement matrix for every person i. The following functions are used in this process: 
+- `take_test()`: Simulates that at the time points corresponding to the test ages specified in parameter.py, an iq test is performed.
+- `is_learned()`: Evaluates whether a micro skill is learned or passed in case of an IQ test. The next three functions described are used to decide this.
+- `get_cog_cap()`: Determines the cognitive capacity of person i at every time point t
+- `get_concentration()`: Adds random noise to the concentration capacity of a person, to simulate differences in concentration
+- `get_acquired_knowledge()`: Determines how much is already learned that is similar to the current micro skill.
 
 ### tests.py
+When the simulation is performed, the test file uses the created matrices to generate plots to create an overview of the simulation. 
+
 ### parameters.py
+In this file all parameters to tune the simulation are set.
