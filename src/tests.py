@@ -286,3 +286,21 @@ class Test:
         df.to_csv("Docs/Test_" + str(testnr) + "/input_data_fa.csv")
 
         return df
+
+    def save_iq_tests(self):
+
+        for testnr in range(len(params.TEST_AGES)):
+            last_index = int(params.nrOfTestOccasions + (testnr+1 * 100))
+            df = pd.DataFrame(self.simulation.learning_matrix[last_index - 100: last_index, :], dtype=int)
+            df.to_csv("Docs/Test_" + str(testnr+1) + "/raw_iq_score_" + params.PERS_TWIN + ".csv")
+
+    def compute_heritability(self):
+        # H2 = 2(r(MZ) - r(DZ))
+
+        for testnr in range(len(params.TEST_AGES)):
+            path = "Docs/Test_" + str(testnr+1) + "/raw_iq_score_"
+            mono = pd.read_csv(path + 'mono' + ".csv", encoding='utf-8')
+            diz = pd.read_csv(path + 'diz' + ".csv", encoding='utf-8')
+
+            # np.corrcoef(mono, char)[0, 1]
+            # H2 = 2*()

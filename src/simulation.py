@@ -77,9 +77,10 @@ class Simulation:
         """ Check whether person n was able to learn the microskill m """
         # TODO: remove unneeded numbers from add (17)
 
+
         if test:
-            if timepoint > (T / TOTAL_YEARS) * 17:
-                microskill = microskill + int(100)
+            if timepoint > (T / TOTAL_YEARS) * params.DIFFICULT_TEST_AGE:
+                microskill = microskill + int(100)  # first 100 are simple test, so add 100 for difficult test
             req_cog_cap = self.test_matrix[microskill, 0]
             concentration = self.personality_matrix[person, 1]
         else:

@@ -19,7 +19,6 @@ def create_personality_matrix(twin_type):
     """
     Matrix that codes the value of person i on characteristic c (cognitive capacity and concentration) (N x C)
     """
-    # TODO: implement twin options
 
     if twin_type == 'none' or twin_type == 'diz':
         cog_cap = truncnorm.rvs(a=0, b=np.inf, loc=params.PERS_MEAN_COP_CAP, scale=params.PERS_SD_COG_CAP, size=(N, 1))
@@ -33,10 +32,6 @@ def create_personality_matrix(twin_type):
 
     if twin_type == 'diz':
         cog_cap[1::2] = (cog_cap[::2] + cog_cap[1::2])/2
-        # noise = np.random.normal(0, .15, int(N/2))
-        # cog_cap[0::2] = np.add(cog_cap[0::2], noise[:, np.newaxis])
-        # noise = np.random.normal(0, .2, int(N / 2))
-        # conc[0::2] = np.add(conc[0::2], noise[:, np.newaxis])
 
     personality = np.hstack((cog_cap, conc))
 

@@ -26,14 +26,14 @@ This file contains four functions, each creating a different matrix that is need
 - `create_personality_matrix(twin_type)` N x C matrix that codes the value 
 of person i on characteristic c.
 - `create_knowledge_matrix(personality_matrix)` M x F matrix that codes how each factor f loads onto each micro skill m.
-- `create_test_matrix(knowledge_matrix)` Q x F matrix that codes how each factor f loads onto each micro skill m.
+- `create_test_matrix(knowledge_matrix)` (Q x F) + (Q x F) matrix that codes how each factor f loads onto each micro skill m. Contains two tests (row 0-100),a simple and a difficult one (row 100-200). 
 - `create_schooling_array()` array of size M that codes which micro skill m is offered at which time step t. This array is created anew for every person i.
 
 ### simulation.py
 In this file the life course of every person is simulated. Micro skills from the *schooling_array* are offered to every 
 person and evaluated whether they learn the micro skill or not. The following matrices are created:
-- Learning matrix: (T+Q) x N matrix that codes whether the micro skill offered at time step t was learned by person i.
-- Achievement matrix: N x M matrix that codes whether micro skill m has been acquired by person i.
+- `Learning matrix`: (T+Q) x N matrix that codes whether the micro skill offered at time step t was learned by person i.
+- `Achievement matrix`: N x M matrix that codes whether micro skill m has been acquired by person i.
 \
 \
 The `update()` function updates the learning and achievement matrix for every person i. The following functions are used in this process: 
