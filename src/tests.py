@@ -283,24 +283,36 @@ class Test:
             select_items = select_items + 1
 
         df = pd.DataFrame(scores_by_similar_items.T, columns=['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
-        df.to_csv("Docs/Test_" + str(testnr) + "/input_data_fa.csv")
 
         return df
 
-    def save_iq_tests(self):
+    def save_iq_test(self):
 
         for testnr in range(len(params.TEST_AGES)):
-            last_index = int(params.nrOfTestOccasions + (testnr+1 * 100))
-            df = pd.DataFrame(self.simulation.learning_matrix[last_index - 100: last_index, :], dtype=int)
-            df.to_csv("Docs/Test_" + str(testnr+1) + "/raw_iq_score_" + params.PERS_TWIN + ".csv")
+            df = self.prepare_data(testnr+1)
+            df.to_csv("Docs/Test_" + str(testnr+1) + "/input_data_fa_" + params.PERS_TWIN + ".csv", index=False)
+
 
     def compute_heritability(self):
-        # H2 = 2(r(MZ) - r(DZ))
+        # Falconer's formula  H2 = 2(r(MZ) - r(DZ))
 
         for testnr in range(len(params.TEST_AGES)):
-            path = "Docs/Test_" + str(testnr+1) + "/raw_iq_score_"
+            print(testnr+1)
+            path = "Docs/Test_" + str(testnr+1) + "/input_data_fa_"
             mono = pd.read_csv(path + 'mono' + ".csv", encoding='utf-8')
             diz = pd.read_csv(path + 'diz' + ".csv", encoding='utf-8')
 
-            # np.corrcoef(mono, char)[0, 1]
-            # H2 = 2*()
+            mono_1 = mono[(mono.index % 2) == 0].values
+            mono_2 = mono[(mono.index % 2) == 1].values
+            diz_1 = diz[(diz.index % 2) == 0].values
+            diz_2 = diz[(diz.index % 2) == 1].values
+
+            mono_corr = []
+            diz_corr = []
+
+            for row in range(50):
+                mono_corr.append(np.corrcoef(mono_1[row, :], mono_2[row, :])[0, 1])
+                diz_corr.append(np.corrcoef(diz_1[row, :], diz_2[row, :])[0, 1])
+
+            H2 = 2 * (np.mean(mono_corr) - np.mean(diz_corr))
+            print(H2)

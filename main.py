@@ -1,5 +1,6 @@
 from src import simulation, tests
 import time
+import src.parameters as params
 
 start_time = time.time()
 
@@ -14,5 +15,5 @@ tests = tests.Test(simulation)
 # tests.run()
 
 """ Compare multiple simulations """
-# tests.save_iq_tests()
+# tests.save_iq_test()
 tests.compute_heritability()
