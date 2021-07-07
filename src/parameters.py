@@ -3,7 +3,7 @@ import numpy as np
 """
 Speed up the simulation for testing code
 """
-nrOfPersInTest = int(100)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
+nrOfPersInTest = int(10)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
 
 """
 Matrix sizes
@@ -24,7 +24,7 @@ PERS_MEAN_COP_CAP = float(0.7)  # mean of truncated normal distribution to sampl
 PERS_SD_COG_CAP = float(0.5)  # sd of truncated normal distribution to sample cognitive capacity from
 PERS_MEAN_CONC = float(0.5)  # mean of truncated normal distribution to sample concentration from
 PERS_SD_CONC = float(0.2)  # sd of truncated normal distribution to sample concentration from
-PERS_TWIN = 'mono'  # none, mono, diz
+PERS_TWIN = 'diz'  # none, mono, diz
 
 """
 Parameters to create knowledge matrix

@@ -289,30 +289,30 @@ class Test:
     def save_iq_test(self):
 
         for testnr in range(len(params.TEST_AGES)):
-            df = self.prepare_data(testnr+1)
-            df.to_csv("Docs/Test_" + str(testnr+1) + "/input_data_fa_" + params.PERS_TWIN + ".csv", index=False)
+            last_index = int(params.nrOfTestOccasions + (testnr * 100))
+            test_scores = self.simulation.learning_matrix[(last_index - 100):last_index, :]
+            df = pd.DataFrame(np.sum(test_scores, axis=1))
+            df.to_csv("Docs/Test_" + str(testnr+1) + "/raw_iq_score_" + params.PERS_TWIN + ".csv", index=False)
 
 
     def compute_heritability(self):
         # Falconer's formula  H2 = 2(r(MZ) - r(DZ))
 
+        h2 = []
         for testnr in range(len(params.TEST_AGES)):
-            print(testnr+1)
-            path = "Docs/Test_" + str(testnr+1) + "/input_data_fa_"
+            path = "Docs/Test_" + str(testnr+1) + "/raw_iq_score_"
             mono = pd.read_csv(path + 'mono' + ".csv", encoding='utf-8')
             diz = pd.read_csv(path + 'diz' + ".csv", encoding='utf-8')
 
-            mono_1 = mono[(mono.index % 2) == 0].values
-            mono_2 = mono[(mono.index % 2) == 1].values
-            diz_1 = diz[(diz.index % 2) == 0].values
-            diz_2 = diz[(diz.index % 2) == 1].values
+            mono_1 = mono[(mono.index % 2) == 0]['0'].tolist()
+            mono_2 = mono[(mono.index % 2) == 1]['0'].tolist()
+            diz_1 = diz[(diz.index % 2) == 0]['0'].tolist()
+            diz_2 = diz[(diz.index % 2) == 1]['0'].tolist()
 
-            mono_corr = []
-            diz_corr = []
+            mono_corr = np.corrcoef(mono_1, mono_2)[0, 1]
+            diz_corr = np.corrcoef(diz_1, diz_2)[0, 1]
 
-            for row in range(50):
-                mono_corr.append(np.corrcoef(mono_1[row, :], mono_2[row, :])[0, 1])
-                diz_corr.append(np.corrcoef(diz_1[row, :], diz_2[row, :])[0, 1])
+            h2.append(2 * (np.mean(mono_corr) - np.mean(diz_corr)))
 
-            H2 = 2 * (np.mean(mono_corr) - np.mean(diz_corr))
-            print(H2)
+        df = pd.DataFrame(h2, index=['Test 1', 'Test 2', 'Test 3', 'Test 4'], columns=['H2'])
+        df.to_csv("Docs/h2.csv", encoding='utf-8')
