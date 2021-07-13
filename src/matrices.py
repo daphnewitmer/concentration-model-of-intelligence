@@ -65,7 +65,7 @@ def create_test_matrix(knowledge_matrix):
     """
     Matrix that codes how each factor f loads onto each microskill m (Q x F)
     """
-    # TODO: check peaks and valleys
+    # TODO: peaks and valleys should be picked more precise. Uncomment code below (line 81) to check peak and valleys.
 
     cog_cap = knowledge_matrix[:, 0]
     TOTAL_YEARS = params.TOTAL_YEARS_OF_SIMULATION

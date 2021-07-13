@@ -12,8 +12,8 @@ print("--- Simulation took %s seconds ---" % round(time.time() - start_time, 2))
 
 """ Run Tests """
 tests = tests.Test(simulation)
-# tests.run()
+tests.run()
 
 """ Compare multiple simulations """
-# tests.save_iq_test()
+# tests.save_iq_test()  # the tests that are saved here are used to compute the heritability
 tests.compute_heritability()

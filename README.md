@@ -45,6 +45,9 @@ The `update()` function updates the learning and achievement matrix for every pe
 
 ### tests.py
 When the simulation is performed, the test file uses the created matrices to generate plots to create an overview of the simulation. 
+The results can be found in the Docs and Images folders. 
+- Docs: factor analysis results per test and h2 scores
+- Images: stats overview of simulation 
 
 ### parameters.py
 In this file all parameters to tune the simulation are set.

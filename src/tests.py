@@ -12,7 +12,7 @@ class Test:
 
     def run(self):
 
-        # self.plot_cog_cap_structure()
+        # self.plot_cog_cap_structure()  # To visualize twin structure
 
         # Make plots of general learning results and the test structure
         fig, axs = plt.subplots(2, 3)
@@ -116,7 +116,7 @@ class Test:
         corr_sum_knowl_conc = []
         corr_sum_knowl_cog_cap = []
         for timepoint in range(1000):
-            # This line gives a RuntimeWarning because there are a lot of zeros in this array, this can be ignored.
+            # This line gives a RuntimeWarning because one of the vectors does not change, this can be ignored.
             corr_conc = np.corrcoef(learned_skills_per_timepoint_matrix[timepoint, :],
                                     self.simulation.concentration_matrix[timepoint, :])[0, 1]
             corr_sum_knowl_conc.append(corr_conc)
@@ -287,6 +287,7 @@ class Test:
         return df
 
     def save_iq_test(self):
+        """ Save IQ test score to csv so it can be used to compare several simulations """
 
         for testnr in range(len(params.TEST_AGES)):
             last_index = int(params.nrOfTestOccasions + (testnr * 100))
@@ -296,7 +297,7 @@ class Test:
 
 
     def compute_heritability(self):
-        # Falconer's formula  H2 = 2(r(MZ) - r(DZ))
+        """ Function to compute heritability by use of Falconer's formula: H2 = 2(r(MZ) - r(DZ)) """
 
         h2 = []
         for testnr in range(len(params.TEST_AGES)):

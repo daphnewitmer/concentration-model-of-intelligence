@@ -75,8 +75,6 @@ class Simulation:
 
     def is_learned(self, person: int, microskill: int, timepoint: int, cog_cap: np.ndarray, test: bool):
         """ Check whether person n was able to learn the microskill m """
-        # TODO: remove unneeded numbers from add (17)
-
 
         if test:
             if timepoint > (T / TOTAL_YEARS) * params.DIFFICULT_TEST_AGE:

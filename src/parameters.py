@@ -3,7 +3,7 @@ import numpy as np
 """
 Speed up the simulation for testing code
 """
-nrOfPersInTest = int(10)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
+nrOfPersInTest = int(100)  # run simulation for a part of the possible simulated persons (faster simulation for testing)
 
 """
 Matrix sizes
